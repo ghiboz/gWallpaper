@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <ApplicationIcon>wallpaper-1321215628887211651.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
