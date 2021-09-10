@@ -24,9 +24,9 @@ namespace gWallpaper
             int size = 3840;
 
             Random r = new Random(DateTime.Now.Millisecond);
-            Console.WriteLine("Enter image id: (0 random)");
+            Console.WriteLine("Enter image id: (0~7 from newest to latest, 9 random)");
             var value = Console.ReadLine();
-            int id = 0;
+            int id = 9;
             try
             {
                 id = Convert.ToInt32(value);
@@ -35,7 +35,7 @@ namespace gWallpaper
             {
             }
             ciuzz:
-            if (id == 0)
+            if (id == 9)
             {
                 int rInt = r.Next(0, 8); //for ints
                 id = rInt;
@@ -50,7 +50,7 @@ namespace gWallpaper
             Set(fileName, Style.Stretched);
 
             Console.WriteLine($"Wallpaper #{id} set: {json.copyright}");
-            Console.WriteLine("Enter image id: (0 random)");
+            Console.WriteLine("Enter image id: (0~7 from newest to latest, 9 random)");
             value = Console.ReadLine();
             id = -1;
             try
