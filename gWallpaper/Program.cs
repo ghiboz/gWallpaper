@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace gWallpaper
 {
@@ -22,6 +23,19 @@ namespace gWallpaper
         static void Main(string[] args)
         {
             int size = 3840;
+
+            var savePath = "";
+            if (args.Length > 0)
+            {
+                savePath = args[0];
+            }
+
+            if (string.IsNullOrEmpty(savePath))
+            {
+                savePath = System.IO.Path.GetTempPath();
+            }
+
+            Console.WriteLine($"save path: {savePath}");
 
             Random r = new Random(DateTime.Now.Millisecond);
             Console.WriteLine("Enter image id: (0~7 from newest to latest, 9 random)");
@@ -44,7 +58,8 @@ namespace gWallpaper
             var jsonString = new WebClient().DownloadString(url);
             var json = System.Text.Json.JsonSerializer.Deserialize<BingStuff>(jsonString);
 
-            var fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".jpg";
+            var fileName = Path.Combine(savePath, GetTitle(json.copyright) + ".jpg");
+
             new WebClient().DownloadFile(json.url, fileName);
 
             Set(fileName, Style.Stretched);
@@ -64,6 +79,12 @@ namespace gWallpaper
             {
                 goto ciuzz;
             }
+        }
+
+        static string GetTitle(string copyrights)
+        {
+            var last = copyrights.IndexOf('(');
+            return copyrights.Substring(0, last - 1);
         }
 
         static void Set(string imgPath, Style style)
