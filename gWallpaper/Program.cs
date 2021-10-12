@@ -62,7 +62,11 @@ namespace gWallpaper
 
             new WebClient().DownloadFile(json.url, fileName);
 
-            Set(fileName, Style.Stretched);
+            var wpFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "wallpaper.jpg");
+
+            File.Copy(fileName, wpFile, true);
+
+            Set(wpFile, Style.Stretched);
 
             Console.WriteLine($"Wallpaper #{id} set: {json.copyright}");
             Console.WriteLine("Enter image id: (0~7 from newest to latest, 9 random)");

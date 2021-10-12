@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "gWallpaper": {
+      "commandName": "Project",
+      "commandLineArgs": "I:\\Wallpapers"
+    }
+  }
+}
