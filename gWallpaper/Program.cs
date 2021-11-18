@@ -57,8 +57,8 @@ namespace gWallpaper
             }
             string url = $"https://bing.biturl.top/?resolution={size}&format=json&index={id}&mkt=en-US";
 
-            url = $"https://en.bing.com/HPImageArchive.aspx?format=xml&idx={id}&n=1&mkt=en-US";
-            var bingURL = "https://en.bing.com";
+            url = $"https://cn.bing.com/HPImageArchive.aspx?format=xml&idx={id}&n=1&mkt=en-US";
+            var bingURL = "https://cn.bing.com";
             
             
             var xmlString = new WebClient().DownloadString(url);
