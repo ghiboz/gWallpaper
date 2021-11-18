@@ -7,6 +7,7 @@ using System.Drawing.Text;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Xml;
 
 namespace gWallpaper
 {
@@ -55,12 +56,37 @@ namespace gWallpaper
                 id = rInt;
             }
             string url = $"https://bing.biturl.top/?resolution={size}&format=json&index={id}&mkt=en-US";
-            var jsonString = new WebClient().DownloadString(url);
-            var json = System.Text.Json.JsonSerializer.Deserialize<BingStuff>(jsonString);
 
-            var fileName = Path.Combine(savePath, GetTitle(json.copyright) + ".jpg");
+            url = $"https://en.bing.com/HPImageArchive.aspx?format=xml&idx={id}&n=1&mkt=en-US";
+            var bingURL = "https://en.bing.com";
+            
+            
+            var xmlString = new WebClient().DownloadString(url);
 
-            new WebClient().DownloadFile(json.url, fileName);
+            var xml = new XmlDocument();
+            xml.LoadXml(xmlString);
+
+            var nodeImages = xml.SelectNodes("images")[0];
+            var nodeImage = nodeImages.SelectNodes("image")[0];
+            var xStartDate = nodeImage.SelectNodes("startdate")[0].InnerText;
+            var xEndtDate = nodeImage.SelectNodes("enddate")[0].InnerText;
+            var xUrl = nodeImage.SelectNodes("url")[0].InnerText;
+            var xUrlBase = nodeImage.SelectNodes("urlBase")[0].InnerText;
+            var xCopyright = $"{nodeImage.SelectNodes("copyright")[0].InnerText}";
+            // var xCopyrightLink = nodeImage.SelectNodes("copyrightLink")[0].InnerText;
+
+            var realUrl = $"{bingURL}{xUrlBase}_UHD.jpg";
+
+
+
+            //var jsonString = new WebClient().DownloadString(url);
+
+            
+            //var json = System.Text.Json.JsonSerializer.Deserialize<BingStuff>(jsonString);
+
+            var fileName = Path.Combine(savePath, GetTitle(xCopyright) + ".jpg");
+
+            new WebClient().DownloadFile(realUrl, fileName);
 
             var wpFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "wallpaper.jpg");
 
@@ -68,7 +94,7 @@ namespace gWallpaper
 
             Set(wpFile, Style.Stretched);
 
-            Console.WriteLine($"Wallpaper #{id} set: {json.copyright}");
+            Console.WriteLine($"Wallpaper #{id} set: {xCopyright}");
             Console.WriteLine("Enter image id: (0~7 from newest to latest, 9 random)");
             value = Console.ReadLine();
             id = -1;
