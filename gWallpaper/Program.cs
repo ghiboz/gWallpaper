@@ -114,7 +114,11 @@ namespace gWallpaper
         static string GetTitle(string copyrights)
         {
             var last = copyrights.IndexOf('(');
-            return copyrights.Substring(0, last - 1);
+            return ReplaceInvalidChars(copyrights.Substring(0, last - 1));
+        }
+        static string ReplaceInvalidChars(string filename)
+        {
+            return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
         }
 
         static void Set(string imgPath, Style style)
